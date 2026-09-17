@@ -7,7 +7,7 @@ using SistemaEstacionamento.Features.Carro;
 namespace SistemaEstacionamento.Features.Carro
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("/api/carro")]
     public class ControllerCarro : ControllerBase
     {
         private readonly IServiceCarro serviceCarro;
@@ -24,7 +24,7 @@ namespace SistemaEstacionamento.Features.Carro
             return Ok(lista);
         }
 
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult> GetbyId(int id)
         {
             var objeto = await serviceCarro.ObterPorIdAsync(id);
@@ -38,11 +38,11 @@ namespace SistemaEstacionamento.Features.Carro
             return Ok(resposta);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var resposta = serviceCarro.ExcluirAsync(id);
-            return Ok(resposta);
+            await serviceCarro.ExcluirAsync(id);
+            return Ok();
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Text;
 namespace SistemaEstacionamento.Features.Registro
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/registro")]
     public class ControllerRegistro: ControllerBase
     {
         private readonly IServiceRegistro serviceRegistro;
@@ -17,6 +17,12 @@ namespace SistemaEstacionamento.Features.Registro
             serviceRegistro = _serviceRegistro;
         }
 
+        /* === FYI ===
+             tipo de retorno que você usa nos métodos de um Controller para representar uma resposta HTTP.
+            Em uma API, você não retorna apenas um dado cru (como uma lista de carros ou um objeto). Você precisa informar ao cliente (o frontend, o mobile ou outro sistema) 
+            o status da requisição (se deu certo, se o recurso não foi encontrado, se houve erro de validação, etc.). O ActionResult serve justamente para encapsular 
+            esses códigos de status HTTP junto com os dados.
+         */
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -24,7 +30,7 @@ namespace SistemaEstacionamento.Features.Registro
             return Ok(lista);
         }
 
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult> GetbyId(int id)
         {
             var objeto = await serviceRegistro.ObterPorIdAsync(id);
@@ -38,18 +44,17 @@ namespace SistemaEstacionamento.Features.Registro
             return Ok(resposta);
         }
 
-        [HttpPut]
+        [HttpPut("{id}/{valorPago}/{dataSaida}")]
         public async Task<ActionResult> RegistrarSaida(int id, decimal valorPago, DateTime? dataSaida)
         {
             var resposta = serviceRegistro.RegistrarSaidaAsync(id, valorPago, dataSaida);
             return Ok(resposta);
         }
-
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var resposta = serviceRegistro.ExcluirAsync(id);
-            return Ok(resposta);
+            await serviceRegistro.ExcluirAsync(id);
+            return Ok();
         }
     }
 }
