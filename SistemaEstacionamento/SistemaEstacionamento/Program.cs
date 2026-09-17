@@ -22,8 +22,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 // 2. INJEÇÃO DE DEPENDÊNCIA (SERVICES)
 // ============================================================
 // AddScoped garante que uma nova instância do Service seja criada por requisição HTTP
-builder.Services.AddScoped<ICarroService, CarroService>();
-builder.Services.AddScoped<IRegistroService, RegistroService>();
+builder.Services.AddScoped<IServiceCarro, CarroService>();
+builder.Services.AddScoped<IServiceRegistro, RegistroService>();
 
 
 // ============================================================

@@ -6,7 +6,7 @@ namespace SistemaEstacionamento.Features.Registro
 {
     public class Registro
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public DateTime DataEntrada { get; set; }
         public DateTime? DataSaida { get; set; }
         public decimal ValorPago { get; set; }

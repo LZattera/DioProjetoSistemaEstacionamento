@@ -6,16 +6,16 @@ using System.Text;
 
 namespace SistemaEstacionamento.Features.Carro
 {
-    public interface ICarroService
+    public interface IServiceCarro
     {
         Task<IEnumerable<Carro>> ObterTodosAsync();
-        Task<Carro> ObterPorIdAsync(Guid id);
+        Task<Carro> ObterPorIdAsync(int id);
         Task<Carro> AdicionarAsync(Carro carro);
         Task AtualizarAsync(Carro carro);
-        Task ExcluirAsync(Guid id); // Vai realizar o Soft Delete
+        Task ExcluirAsync(int id); // Vai realizar o Soft Delete
     }
 
-    public class CarroService : ICarroService
+    public class CarroService : IServiceCarro
     {
         private readonly DataContext _context;
 
@@ -34,7 +34,7 @@ namespace SistemaEstacionamento.Features.Carro
                 .ToListAsync();
         }
 
-        public async Task<Carro> ObterPorIdAsync(Guid id)
+        public async Task<Carro> ObterPorIdAsync(int id)
         {
             // Busca o carro garantindo que ele não está excluído
             return await _context.Carros
@@ -43,8 +43,7 @@ namespace SistemaEstacionamento.Features.Carro
 
         public async Task<Carro> AdicionarAsync(Carro carro)
         {
-            carro.Id = Guid.NewGuid();
-            carro.Excluido = false; // Garante que não nasça excluído
+            carro.Excluido = false; 
 
             await _context.Carros.AddAsync(carro);
             await _context.SaveChangesAsync();
@@ -63,7 +62,7 @@ namespace SistemaEstacionamento.Features.Carro
             await _context.SaveChangesAsync();
         }
 
-        public async Task ExcluirAsync(Guid id)
+        public async Task ExcluirAsync(int id)
         {
             var carro = await _context.Carros.FindAsync(id);
 

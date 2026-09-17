@@ -6,9 +6,6 @@ namespace SistemaEstacionamento.Data // Verifique se este é o seu namespace cor
 {
     public class DataContext : DbContext
     {
-        // ========================================================
-        // A SOLUÇÃO ESTÁ AQUI: Este é o construtor que estava faltando!
-        // ========================================================
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
         }

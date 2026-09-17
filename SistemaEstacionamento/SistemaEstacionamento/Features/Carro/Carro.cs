@@ -6,7 +6,7 @@ namespace SistemaEstacionamento.Features.Carro
 {
     public class Carro
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Modelo { get; set; }
         public bool Excluido { get; set; }
 

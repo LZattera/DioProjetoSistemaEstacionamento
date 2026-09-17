@@ -4,17 +4,17 @@ using SistemaEstacionamento.Data;
 
 namespace SistemaEstacionamento.Features.Registro
 {
-    public interface IRegistroService
+    public interface IServiceRegistro
     {
         Task<IEnumerable<Registro>> ObterTodosAsync();
         Task<IEnumerable<Registro>> ObterAbertosAsync(); 
-        Task<Registro> ObterPorIdAsync(Guid id);
+        Task<Registro> ObterPorIdAsync(int id);
         Task<Registro> RegistrarEntradaAsync(Registro registro);
-        Task RegistrarSaidaAsync(Guid id, decimal valorPago, DateTime? dataSaida = null);
+        Task RegistrarSaidaAsync(int id, decimal valorPago, DateTime? dataSaida = null);
         Task AtualizarAsync(Registro registro);
-        Task ExcluirAsync(Guid id); // Soft Delete
+        Task ExcluirAsync(int id); 
     }
-    public class RegistroService : IRegistroService
+    public class RegistroService : IServiceRegistro
     {
         private readonly DataContext _context;
 
@@ -40,7 +40,7 @@ namespace SistemaEstacionamento.Features.Registro
                 .ToListAsync();
         }
 
-        public async Task<Registro> ObterPorIdAsync(Guid id)
+        public async Task<Registro> ObterPorIdAsync(int id)
         {
             return await _context.Registros
                 .FirstOrDefaultAsync(r => r.Id == id && !r.Excluido);
@@ -48,7 +48,6 @@ namespace SistemaEstacionamento.Features.Registro
 
         public async Task<Registro> RegistrarEntradaAsync(Registro registro)
         {
-            registro.Id = Guid.NewGuid();
             registro.Excluido = false;
 
             // Garante que não tenha data de saída e valor pago na entrada
@@ -68,7 +67,7 @@ namespace SistemaEstacionamento.Features.Registro
         }
 
         // Método específico de negócio para fechar a conta do estacionamento
-        public async Task RegistrarSaidaAsync(Guid id, decimal valorPago, DateTime? dataSaida = null)
+        public async Task RegistrarSaidaAsync(int id, decimal valorPago, DateTime? dataSaida = null)
         {
             var registro = await _context.Registros.FirstOrDefaultAsync(r => r.Id == id && !r.Excluido);
 
@@ -95,7 +94,7 @@ namespace SistemaEstacionamento.Features.Registro
             await _context.SaveChangesAsync();
         }
 
-        public async Task ExcluirAsync(Guid id)
+        public async Task ExcluirAsync(int id)
         {
             var registro = await _context.Registros.FindAsync(id);
 
