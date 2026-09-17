@@ -36,11 +36,13 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configura o pipeline de requisições HTTP
-//if (app.Environment.IsDevelopment())
-//{
+Console.WriteLine("Envirom,ent");
+Console.WriteLine(app.Environment.IsDevelopment());
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
-//}
+}
 
 app.UseHttpsRedirection();
 
