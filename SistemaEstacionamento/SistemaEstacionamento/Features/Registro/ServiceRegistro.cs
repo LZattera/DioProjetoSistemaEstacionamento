@@ -12,7 +12,8 @@ namespace SistemaEstacionamento.Features.Registro
         Task<Registro> RegistrarEntradaAsync(Registro registro);
         Task RegistrarSaidaAsync(int id, decimal valorPago, DateTime? dataSaida = null);
         Task AtualizarAsync(Registro registro);
-        Task ExcluirAsync(int id); 
+        Task ExcluirAsync(int id);
+        Task<Registro> ObterCarroAsync(int idCarro);
     }
     public class RegistroService : IServiceRegistro
     {
@@ -29,6 +30,14 @@ namespace SistemaEstacionamento.Features.Registro
                 .Where(r => !r.Excluido)
                 .AsNoTracking()
                 .ToListAsync();
+        }
+
+        public async Task<Registro> ObterCarroAsync(int idCarro)
+        {
+            return await _context.Registros
+                .Where(r => !r.Excluido && r.IdCarro==idCarro)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
 
         // Método extra: Traz apenas os veículos que ainda não saíram

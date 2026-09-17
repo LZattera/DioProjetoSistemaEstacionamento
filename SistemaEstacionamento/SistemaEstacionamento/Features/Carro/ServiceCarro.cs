@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SistemaEstacionamento.Data;
+using SistemaEstacionamento.Features.Registro;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,11 +20,13 @@ namespace SistemaEstacionamento.Features.Carro
     public class CarroService : IServiceCarro
     {
         private readonly DataContext _context;
+        private readonly IServiceRegistro serviceRegistro;
 
         // Injeção de dependência do Entity Framework
-        public CarroService(DataContext context)
+        public CarroService(DataContext context, IServiceRegistro _serviceRegistro)
         {
             _context = context;
+            serviceRegistro = _serviceRegistro;
         }
 
         public async Task<IEnumerable<Carro>> ObterTodosAsync()
@@ -66,14 +70,31 @@ namespace SistemaEstacionamento.Features.Carro
         {
             var carro = await _context.Carros.FindAsync(id);
 
-            if (carro != null && !carro.Excluido)
+            var registro = await serviceRegistro.ObterCarroAsync(id);
+            if(registro == null)
             {
-                // Soft Delete: Apenas altera a flag de exclusão
-                carro.Excluido = true;
-
-                _context.Carros.Update(carro);
-                await _context.SaveChangesAsync();
+                throw new Exception($"Não tem registro cadastrado para o carro {carro.Modelo}");
             }
+            else
+            {
+                registro.DataSaida = DateTime.Now;
+                TimeSpan duracao = registro.DataSaida.Value - registro.DataEntrada;
+
+                decimal valorHora = 10.00m;
+                int horasCobradas = (int)Math.Max(1, Math.Ceiling(duracao.TotalHours));
+
+                registro.DataSaida = registro.DataSaida;
+                registro.ValorPago = horasCobradas * valorHora;
+
+                await serviceRegistro.AtualizarAsync(registro);
+                await serviceRegistro.ExcluirAsync(registro.Id);
+            }
+
+            carro.Excluido = true;
+            _context.Carros.Update(carro);
+
+            await _context.SaveChangesAsync();
+
         }
     }
 

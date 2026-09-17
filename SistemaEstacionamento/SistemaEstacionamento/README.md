@@ -6,7 +6,7 @@ listar os veículos.
 Projeto terá:
 openAPI
 Testes
-System Design - Package by Feature
+System Design - Package by Featurecc 
 EF Entity Framework para ORM
 Migrations
 BD Mysql
