@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SistemaEstacionamento.Data;
+using SistemaEstacionamento.Features.Carro;
 
 
 namespace SistemaEstacionamento.Features.Registro
@@ -18,10 +19,12 @@ namespace SistemaEstacionamento.Features.Registro
     public class RegistroService : IServiceRegistro
     {
         private readonly DataContext _context;
+        private readonly ILogger<RegistroService> _logger;
 
-        public RegistroService(DataContext context)
+        public RegistroService(DataContext context, ILogger<RegistroService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<Registro>> ObterTodosAsync()
@@ -72,6 +75,7 @@ namespace SistemaEstacionamento.Features.Registro
             await _context.Registros.AddAsync(registro);
             await _context.SaveChangesAsync();
 
+            _logger.LogInformation("Registro {Id} cadastrado com sucesso", registro.Id);
             return registro;
         }
 
@@ -91,6 +95,7 @@ namespace SistemaEstacionamento.Features.Registro
 
             _context.Registros.Update(registro);
             await _context.SaveChangesAsync();
+            _logger.LogInformation("Registro {Id} atualizado com sucesso", registro.Id);
         }
 
         public async Task AtualizarAsync(Registro registro)
@@ -101,6 +106,7 @@ namespace SistemaEstacionamento.Features.Registro
 
             _context.Registros.Update(registro);
             await _context.SaveChangesAsync();
+            _logger.LogInformation("Registro {Id} atualizado com sucesso", registro.Id);
         }
 
         public async Task ExcluirAsync(int id)
@@ -111,6 +117,7 @@ namespace SistemaEstacionamento.Features.Registro
             {
                 // Aplica o Soft Delete
                 registro.Excluido = true;
+                _logger.LogInformation("Registro {Id} excluído com sucesso", registro.Id);
 
                 _context.Registros.Update(registro);
                 await _context.SaveChangesAsync();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 using SistemaEstacionamento.Data;
 using SistemaEstacionamento.Features.Carro;
@@ -16,6 +17,7 @@ namespace SistemaEstacionamento
         private readonly DataContext _context;
         private readonly Mock<IServiceRegistro> _serviceRegistroMock;
         private readonly CarroService _service;
+        private readonly Mock<ILogger<CarroService>> _loggerMock;
 
         public CarroServiceTests()
         {
@@ -26,8 +28,9 @@ namespace SistemaEstacionamento
 
             _context = new DataContext(options);
             _serviceRegistroMock = new Mock<IServiceRegistro>();
+            _loggerMock = new Mock<ILogger<CarroService>>();
 
-            _service = new CarroService(_context, _serviceRegistroMock.Object);
+            _service = new CarroService(_context, _serviceRegistroMock.Object, _loggerMock.Object);
         }
 
         public void Dispose()

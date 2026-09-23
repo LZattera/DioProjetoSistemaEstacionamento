@@ -5,10 +5,10 @@ listar os veículos.
 
 Projeto terá:
 openAPI
-Testes
+Testes - ok
 System Design - Package by Feature - ok
 EF Entity Framework para ORM - ok
 Migrations
 BD Mysql
-Logs com Serilog
+Logs com Serilog - ok
 Observabilidade do sistema com Prometheus e Grafana

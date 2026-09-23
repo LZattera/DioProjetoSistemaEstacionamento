@@ -21,12 +21,14 @@ namespace SistemaEstacionamento.Features.Carro
     {
         private readonly DataContext _context;
         private readonly IServiceRegistro serviceRegistro;
+        private readonly ILogger<CarroService> _logger;
 
         // Injeção de dependência do Entity Framework
-        public CarroService(DataContext context, IServiceRegistro _serviceRegistro)
+        public CarroService(DataContext context, IServiceRegistro _serviceRegistro, ILogger<CarroService> logger)
         {
             _context = context;
             serviceRegistro = _serviceRegistro;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<Carro>> ObterTodosAsync()
@@ -52,6 +54,7 @@ namespace SistemaEstacionamento.Features.Carro
             await _context.Carros.AddAsync(carro);
             await _context.SaveChangesAsync();
 
+            _logger.LogInformation("Carro {Id} cadastrado com sucesso", carro.Id);
             return carro;
         }
 
@@ -64,6 +67,7 @@ namespace SistemaEstacionamento.Features.Carro
 
             _context.Carros.Update(carro);
             await _context.SaveChangesAsync();
+            _logger.LogInformation("Carro {Id} atualizado com sucesso", carro.Id);
         }
 
         public async Task ExcluirAsync(int id)
@@ -94,6 +98,7 @@ namespace SistemaEstacionamento.Features.Carro
             _context.Carros.Update(carro);
 
             await _context.SaveChangesAsync();
+            _logger.LogInformation("Carro {Id} excluído com sucesso", carro.Id);
 
         }
     }
