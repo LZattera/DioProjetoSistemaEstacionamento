@@ -6,8 +6,8 @@ listar os veículos.
 Projeto terá:
 openAPI
 Testes
-System Design - Package by Featurecc 
-EF Entity Framework para ORM
+System Design - Package by Feature - ok
+EF Entity Framework para ORM - ok
 Migrations
 BD Mysql
 Logs com Serilog

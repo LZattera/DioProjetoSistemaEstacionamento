@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="SistemaEstacionamento/SistemaEstacionamento.csproj" />
+  <Project Path="SistemaEstacionamentoTestes/SistemaEstacionamentoTestes.csproj" Id="97abfd05-c213-425b-b896-c61b7c4adc8d" />
 </Solution>
