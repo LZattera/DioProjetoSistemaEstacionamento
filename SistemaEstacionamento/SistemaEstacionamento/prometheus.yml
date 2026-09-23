@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 5s # Frequência de coleta
+
+scrape_configs:
+  - job_name: 'estacionamento_api'
+    metrics_path: '/metrics'
+    static_configs:
+      # Use host.docker.internal para o container alcançar a API rodando no host da sua máquina
+      - targets: ['host.docker.internal:5000']
